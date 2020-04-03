@@ -3,13 +3,13 @@ from tkinter import *
 from cryption import *
 def send(event):
     thing=entry.get()
-    file = open(r'/home/wilson/Documents/Code/hurbIM/client/message.txt','w')
+    file = open(r'client/message.txt','w')
     file.write(thing)
     file.close()
     entry.delete (0, last=len(thing))
     write_key()
     key = load_key()
-    file = "/home/wilson/Documents/Code/hurbIM/client/message.txt"
+    file = "client/message.txt"
     encrypt(file, key)
 
 window = tk.Tk()

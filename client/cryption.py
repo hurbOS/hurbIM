@@ -1,12 +1,12 @@
 from cryptography.fernet import Fernet
-
+#gffgyg
 #making a key
 def write_key():
     key = Fernet.generate_key()
-    with open("key.key", "wb") as key_file:
+    with open("client/key.key", "wb") as key_file:
         key_file.write(key)
 def load_key():
-    return open("key.key", "rb").read()
+    return open("client/key.key", "rb").read()
 
 def encrypt(filename, key):
     f = Fernet(key)
