@@ -6,7 +6,7 @@ def write_key():
     with open("client/key.key", "wb") as key_file:
         key_file.write(key)
 def load_key():
-    return open("client/key.key", "rb").read()
+    return open("key.key", "rb").read()
 
 def encrypt(filename, key):
     f = Fernet(key)
