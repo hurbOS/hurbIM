@@ -1,14 +1,24 @@
+from picotui import *
+from picotui.context import Context
+from picotui.screen import Screen
+from picotui.widgets import *
+from picotui.defs import *
 
-import npyscreen
-class hurbim(npyscreen.NPSApp):
-    def main(self):
-        # These lines create the form and populate it with widgets.
-        # A fairly complex screen in only 8 or so lines of code - a line for each control.
-        F  = npyscreen.Form(name = "hurbIM",)
-        grid = F.add(npyscreen.SimpleGrid,columns = 2, column_width = 3,col_margin=1,row_height = 1)
+with Context():
+    d = Dialog(0,0)
+    d.add(22, 40, WTextEntry(100,""))
 
+    d.add(1, 1, WFrame(20, 40, "Messages"))
+    d.add(2, 2, WListBox(18, 38, ["choice%d" % i for i in range(50)]))
 
-        # This lets the user interact with the Form.
-        F.edit()
+    d.add(21, 2, WFrame(102,38,))
+    f = open("message.txt", "r")
+    d.add(22, 3, WListBox(100, 36, [f]))
+    a = WButton(11,"Friends")
+    b = WButton(8, "Quit")
+    d.add(114, 1, b)
+    d.add(102, 1, a)
+    b.finish_dialog = ACTION_OK
 
-        print(ms.get_selected_objects())
+    #d.redraw()
+    result = d.loop()
