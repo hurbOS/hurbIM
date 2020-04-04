@@ -2,10 +2,10 @@ from cryptography.fernet import Fernet
 
 def write_key():
     key = Fernet.generate_key()
-    with open("client/key.key", "wb") as key_file:
+    with open("Documents/Code/hurbIM/client/key.key","x") as key_file:
         key_file.write(key)
 def load_key():
-    return open("key.key", "rb").read()
+    return open("Documents/Code/hurbIM/client/key.key", "rb").read()
 
 def encrypt(filename, key):
     f = Fernet(key)
@@ -22,3 +22,4 @@ def decrypt(filename, key):
     decrypted_data = f.decrypt(encrypted_data)
     with open(filename, "wb") as file:
         file.write(decrypted_data)
+write_key()

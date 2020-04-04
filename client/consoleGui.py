@@ -3,6 +3,7 @@ from picotui.context import Context
 from picotui.screen import Screen
 from picotui.widgets import *
 from picotui.defs import *
+from cryption import *
 
 with Context():
     d = Dialog(0,0)
@@ -12,8 +13,12 @@ with Context():
     d.add(2, 2, WListBox(18, 38, ["choice%d" % i for i in range(50)]))
 
     d.add(21, 2, WFrame(102,38,))
-    f = open("message.txt", "r")
-    d.add(22, 3, WListBox(100, 36, [f]))
+    z=open("Documents/Code/hurbIM/client/message.txt")
+    file="Documents/Code/hurbIM/client/message.txt"
+    key=load_key()
+    decrypt(file,key)
+    y = z.read()
+    d.add(22, 3, WMultiEntry(100, 36, [y]))
     a = WButton(11,"Friends")
     b = WButton(8, "Quit")
     d.add(114, 1, b)
