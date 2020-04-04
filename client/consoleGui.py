@@ -13,12 +13,13 @@ with Context():
     d.add(2, 2, WListBox(18, 38, ["choice%d" % i for i in range(50)]))
 
     d.add(21, 2, WFrame(102,38,))
-    z=open("Documents/Code/hurbIM/client/message.txt")
-    file="Documents/Code/hurbIM/client/message.txt"
+    z=open("/home/wilson/Documents/Code/hurbIM/client/message.txt").readlines()
+    x=open("/home/wilson/Documents/Code/hurbIM/client/welcome.txt").readlines()
+    open_file=x
+    file = "/home/wilson/Documents/Code/hurbIM/client/message.txt"
     key=load_key()
-    decrypt(file,key)
-    y = z.read()
-    d.add(22, 3, WMultiEntry(100, 36, [y]))
+    num_lines = sum(1 for line in open_file) - 1
+    d.add(22, 3, WListBox(100, 36, ["%s" % open_file[i] for i in range(num_lines)]))
     a = WButton(11,"Friends")
     b = WButton(8, "Quit")
     d.add(114, 1, b)

@@ -2,10 +2,11 @@ from cryptography.fernet import Fernet
 
 def write_key():
     key = Fernet.generate_key()
-    with open("Documents/Code/hurbIM/client/key.key","x") as key_file:
+    with open("/home/wilson/Documents/Code/hurbIM/client/key.key","wb") as key_file:
         key_file.write(key)
+
 def load_key():
-    return open("Documents/Code/hurbIM/client/key.key", "rb").read()
+    return open("/home/wilson/Documents/Code/hurbIM/client/key.key", "rb").read()
 
 def encrypt(filename, key):
     f = Fernet(key)
