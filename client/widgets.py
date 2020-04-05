@@ -1,15 +1,21 @@
+import npyscreen
+import random
 
-from picotui.context import Context
-from picotui.dialogs import *
+class App(npyscreen.StandardApp):
+    def onStart(self):
+        self.addForm("MAIN", MainForm, name="Hello Medium!")
 
+class InputBox(npyscreen.BoxTitle):
+    # MultiLineEdit now will be surrounded by boxing
+    _contained_widget = npyscreen.MultiLineEdit
 
-with Context():
-    # Feel free to comment out extra dialogs to play with a particular
-    # in detail
-    d = DTextEntry(25, "Hello World", title="Wazzup?")
-    res = d.result()
-    d = DMultiEntry(25, 5, "Hello\nWorld".split("\n"), title="Comment:")
-    res = d.result()
-
-
-print(res)
+class MainForm(npyscreen.FormBaseNew):
+    def create(self):
+        y, x = self.useable_space()
+        obj = self.add(npyscreen.BoxTitle, name="BoxTitle",
+              custom_highlighting=True, values=["first line", "second line"],
+              rely=y // 4, max_width=x // 2 - 5, max_height=y // 2)
+        self.add(InputBox, name="Boxed MultiLineEdit", footer="footer",
+              relx=x // 2, rely=2)
+MyApp = App()
+MyApp.run()
