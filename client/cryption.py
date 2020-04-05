@@ -23,4 +23,3 @@ def decrypt(filename, key):
     decrypted_data = f.decrypt(encrypted_data)
     with open(filename, "wb") as file:
         file.write(decrypted_data)
-write_key()
