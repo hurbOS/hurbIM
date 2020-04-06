@@ -1,13 +1,9 @@
-
-
   ██╗  ██╗██╗   ██╗██████╗ ██████╗     ██╗███╗   ███╗
   ██║  ██║██║   ██║██╔══██╗██╔══██╗    ██║████╗ ████║
   ███████║██║   ██║██████╔╝██████╔╝    ██║██╔████╔██║
   ██╔══██║██║   ██║██╔══██╗██╔══██╗    ██║██║╚██╔╝██║
   ██║  ██║╚██████╔╝██║  ██║██████╔╝    ██║██║ ╚═╝ ██║
   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝     ╚═╝╚═╝     ╚═╝
-
-
  - Welcome to hurbIM, a free, open source messenger alternative.
  - Designed for the hurb operating system.
  - To start a conversation, search for the username in the box above.

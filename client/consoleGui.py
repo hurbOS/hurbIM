@@ -21,20 +21,17 @@ numLines = sum(1 for line in openFile)
 class MessageView(Frame):
     def __init__(self, screen):
         super(MessageView, self).__init__(screen,
-                                       screen.height -2,
-                                       screen.width -4,
+                                       screen.height //3 *2,
+                                       screen.width //3 *2,
                                        hover_focus=True,
                                        can_scroll=False,
                                        title="HurbIM")
-        self.set_theme("monochrome")
-        self._list_view = ListBox(height = screen.height-5,name="Conversations",add_scroll_bar=True,options=[("option 1", 1), ("option 2", 2)])
-        self._list_view2 = ListBox(height = screen.height-15,name="Messages",add_scroll_bar=True,options=[])
-        layout = Layout([1,3], fill_frame=True)
+        #self.set_theme("monochrome")
+        self._list_view = ListBox(height = 17,name="Conversations",add_scroll_bar=True,options=[("option 1", 1), ("option 2", 2)])
+        layout = Layout([100], fill_frame=True)
         self.add_layout(layout)
-        layout.add_widget(self._list_view,0)
-        layout.add_widget(self._list_view2,1)
-        layout.add_widget(focus(Text(name="input")),1)
-        layout.add_widget(VerticalDivider(),0)
+        layout.add_widget(self._list_view)
+        layout.add_widget(Divider())
         layout2 = Layout([1,1,1])
         self.add_layout(layout2)
         layout2.add_widget(Button("Settings", self._quit),0)
