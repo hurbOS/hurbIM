@@ -1,41 +1,35 @@
-import curses
-from cryption import *
 import npyscreen
 import sqlite3
 
-class InputBox(npyscreen.BoxTitle):
-    _contained_widget = npyscreen.MultiLineEdit
-class MessageBox(npyscreen.BoxTitle):
-    _contained_widget = npyscreen.Pager
-
 class AddressDatabase(object):
-    def __init__(self, filename="contacts.db"):
+    def __init__(self, filename="example-addressbook.db"):
         self.dbfilename = filename
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
         c.execute(
         "CREATE TABLE IF NOT EXISTS records\
             ( record_internal_id INTEGER PRIMARY KEY, \
-              user_name     TEXT, \
-              user_tag      TEXT \
+              last_name     TEXT, \
+              other_names   TEXT, \
+              email_address TEXT \
               )" \
-              )
+            )
         db.commit()
         c.close()
 
-    def add_record(self, user_name = '', user_tag=''):
+    def add_record(self, last_name = '', other_names='', email_address=''):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
-        c.execute('INSERT INTO records(user_name, user_tag) \
-                    VALUES(?,?,?)', (user_name, user_tag))
+        c.execute('INSERT INTO records(last_name, other_names, email_address) \
+                    VALUES(?,?,?)', (last_name, other_names, email_address))
         db.commit()
         c.close()
 
-    def update_record(self, record_id, user_name = '', user_tag=''):
+    def update_record(self, record_id, last_name = '', other_names='', email_address=''):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
-        c.execute('UPDATE records set user_name=?, user_tag=? \
-                    WHERE record_internal_id=?', (user_name, user_tag, \
+        c.execute('UPDATE records set last_name=?, other_names=?, email_address=? \
+                    WHERE record_internal_id=?', (last_name, other_names, email_address, \
                                                         record_id))
         db.commit()
         c.close()
@@ -62,7 +56,6 @@ class AddressDatabase(object):
         records = c.fetchall()
         c.close()
         return records[0]
-
 #The main screen of the application will be a list of names. When the user selects a name, we will want to edit it. We will subclass MultiLineAction, and override display value to change how each record is presented. We will also override the method actionHighlighted to switch to the edit form when required. Finally, we will add two new keypresses - one to add and one to delete records. Before switching to the EDITRECORDFM, we either set its value to None, if creating a new form, or else set its value to that of the record we wish to edit.
 
 class RecordList(npyscreen.MultiLineAction):
@@ -90,55 +83,50 @@ class RecordList(npyscreen.MultiLineAction):
 
 #The actual form to display the record list will be a FormMutt subclass. We will alter the MAIN_WIDGET_CLASS class variable to use our RecordList widget, and make sure that the list of records is updated every time the form is presented to the user.
 
-class RecordListDisplay(npyscreen.Form):
-    def create(self):
-
-        y, x = self.useable_space()
-        self.ChatBox = self.add(RecordList, name="Chats", relx=2, max_width=x // 6, rely=1,
-                                   max_height=0,values=[])
-        self.MessageBox = self.add(MessageBox,name="Messages", rely=1, relx=(x // 5) + 1, max_height=-3, editable=True,
-                                      custom_highlighting=True, highlighting_arr_color_data=[0],values=[])
-        self.InputBox = self.add(InputBox, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
-
-    def inputbox_submit(self, _input):
-        self.InputBox.value = ""
-        self.InputBox.display()
+class RecordListDisplay(npyscreen.FormMutt):
+    MAIN_WIDGET_CLASS = RecordList
     def beforeEditing(self):
         self.update_list()
 
     def update_list(self):
-        self.ChatBox.values = self.parentApp.myDatabase.list_all_records()
-        self.ChatBox.display()
+        self.wMain.values = self.parentApp.myDatabase.list_all_records()
+        self.wMain.display()
+
 #The form to edit each record will be an example of an ActionForm. Records will only be altered when the user selects the ‘ok’ button. Before the form is presented to the user, the values of each of the individual widgets are updated to match the database record, or cleared if we are creating a new record.
 
 class EditRecord(npyscreen.ActionForm):
     def create(self):
         self.value = None
-        self.wgUserName   = self.add(npyscreen.TitleText, name = "User Name:",)
-        self.wgUserTag = self.add(npyscreen.TitleText, name = "User Tags:")
+        self.wgLastName   = self.add(npyscreen.TitleText, name = "Last Name:",)
+        self.wgOtherNames = self.add(npyscreen.TitleText, name = "Other Names:")
+        self.wgEmail      = self.add(npyscreen.TitleText, name = "Email:")
 
     def beforeEditing(self):
         if self.value:
             record = self.parentApp.myDatabase.get_record(self.value)
             self.name = "Record id : %s" % record[0]
             self.record_id          = record[0]
-            self.wgUserName.value   = record[1]
-            self.wgUserTag.value = record[2]
+            self.wgLastName.value   = record[1]
+            self.wgOtherNames.value = record[2]
+            self.wgEmail.value      = record[3]
         else:
             self.name = "New Record"
             self.record_id          = ''
-            self.wgUserName.value   = ''
-            self.wgUserTag.value = ''
+            self.wgLastName.value   = ''
+            self.wgOtherNames.value = ''
+            self.wgEmail.value      = ''
 
     def on_ok(self):
         if self.record_id: # We are editing an existing record
             self.parentApp.myDatabase.update_record(self.record_id,
-                                            user_name=self.wgUserName.value,
-                                            user_tag = self.wgUserTag.value,
+                                            last_name=self.wgLastName.value,
+                                            other_names = self.wgOtherNames.value,
+                                            email_address = self.wgEmail.value,
                                             )
         else: # We are adding a new record.
-            self.parentApp.myDatabase.add_record(user_name=self.wgUserName.value,
-            user_tag = self.wgUserTag.value,
+            self.parentApp.myDatabase.add_record(last_name=self.wgLastName.value,
+            other_names = self.wgOtherNames.value,
+            email_address = self.wgEmail.value,
             )
         self.parentApp.switchFormPrevious()
 
