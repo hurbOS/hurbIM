@@ -19,7 +19,7 @@ class AddressDatabase(object):
               user_name     TEXT, \
               user_tag      TEXT \
               )" \
-              )
+            )
         db.commit()
         c.close()
 
@@ -27,7 +27,7 @@ class AddressDatabase(object):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
         c.execute('INSERT INTO records(user_name, user_tag) \
-                    VALUES(?,?,?)', (user_name, user_tag))
+                    VALUES(?,?)', (user_name, user_tag))
         db.commit()
         c.close()
 
@@ -115,7 +115,7 @@ class EditRecord(npyscreen.ActionForm):
     def create(self):
         self.value = None
         self.wgUserName   = self.add(npyscreen.TitleText, name = "User Name:",)
-        self.wgUserTag = self.add(npyscreen.TitleText, name = "User Tags:")
+        self.wgUserTag = self.add(npyscreen.TitleText, name = "User Tag:")
 
     def beforeEditing(self):
         if self.value:
@@ -134,11 +134,11 @@ class EditRecord(npyscreen.ActionForm):
         if self.record_id: # We are editing an existing record
             self.parentApp.myDatabase.update_record(self.record_id,
                                             user_name=self.wgUserName.value,
-                                            user_tag = self.wgUserTag.value,
+                                            user_tag = self.wgUserTag.value
                                             )
         else: # We are adding a new record.
             self.parentApp.myDatabase.add_record(user_name=self.wgUserName.value,
-            user_tag = self.wgUserTag.value,
+            user_tag = self.wgUserTag.value
             )
         self.parentApp.switchFormPrevious()
 
