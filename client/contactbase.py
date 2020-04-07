@@ -70,21 +70,19 @@ class RecordList(npyscreen.MultiLineAction):
     def display_value(self, vl):
         return "%s, %s" % (vl[1], vl[2])
 
-    def actionHighlighted(self, act_on_this, keypress):
-        self.parent.parentApp.getForm('EDITRECORDFM').value =act_on_this[0]
-        self.parent.parentApp.switchForm('EDITRECORDFM')
+    #def actionHighlighted(self, act_on_this, keypress):
 
     def when_add_record(self, *args, **keywords):
         self.parent.parentApp.getForm('EDITRECORDFM').value = None
         self.parent.parentApp.switchForm('EDITRECORDFM')
 
     def when_delete_record(self, *args, **keywords):
-        self.parent.parentApp.myDatabase.delete_record(self.values[self.cursor_line][0])
+        self.parent.parentApp.myDatabase2.delete_record(self.values[self.cursor_line][0])
         self.parent.update_list()
 
 #The actual form to display the record list will be a FormMutt subclass. We will alter the MAIN_WIDGET_CLASS class variable to use our RecordList widget, and make sure that the list of records is updated every time the form is presented to the user.
 
-class EditRecord(npyscreen.ActionForm):
+class EditContact(npyscreen.ActionForm):
     def create(self):
         self.value = None
         self.wgUserName   = self.add(npyscreen.TitleText, name = "User Name:",)
@@ -92,7 +90,7 @@ class EditRecord(npyscreen.ActionForm):
 
     def beforeEditing(self):
         if self.value:
-            record = self.parentApp.myDatabase.get_record(self.value)
+            record = self.parentApp.myDatabase2.get_record(self.value)
             self.name = "Record id : %s" % record[0]
             self.record_id          = record[0]
             self.wgUserName.value   = record[1]
@@ -105,12 +103,12 @@ class EditRecord(npyscreen.ActionForm):
 
     def on_ok(self):
         if self.record_id: # We are editing an existing record
-            self.parentApp.myDatabase.update_record(self.record_id,
+            self.parentApp.myDatabase2.update_record(self.record_id,
                                             user_name=self.wgUserName.value,
                                             user_tag = self.wgUserTag.value
                                             )
         else: # We are adding a new record.
-            self.parentApp.myDatabase.add_record(user_name=self.wgUserName.value,
+            self.parentApp.myDatabase2.add_record(user_name=self.wgUserName.value,
             user_tag = self.wgUserTag.value
             )
         self.parentApp.switchFormPrevious()
