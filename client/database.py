@@ -2,8 +2,9 @@ import curses
 import npyscreen
 import sqlite3
 import datetime
+
 class MessageDatabase(object):
-    def __init__(self, filename="messages.db"):
+    def __init__(self,filename="messages.db"):
         self.dbfilename = filename
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
@@ -54,7 +55,7 @@ class MessageDatabase(object):
     def get_record(self, record_id):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
-        c.execute('SELECT sender,timestamp,contents from records WHERE record_internal_id=?', (record_id,))
+        c.execute('SELECT sender,timestamp,contents from records WHERE reciever=?', (record_id, ))
         records = c.fetchall()
         c.close()
         return records[0]
@@ -62,17 +63,17 @@ class MessageDatabase(object):
 class MessageRecordList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
         super(MessageRecordList, self).__init__(*args, **keywords)
+        self.add_handlers({
+            "^A": self.when_add_record,
+        })
         _contained_widget = npyscreen.MultiLineAction
 
-    #def when_add_record(self, *args, **keywords):
-    #    self.parent.parentApp.getForm('EDITMESSAGE').value = None
-    #    self.parent.parentApp.switchForm('EDITMESSAGE')
+    def when_add_record(self, *args, **keywords):
+        self.parent.parentApp.getForm('EDITMESSAGE').value = None
+        self.parent.parentApp.switchForm('EDITMESSAGE')
 
-    def when_delete_record(self, *args, **keywords):
-        self.parent.parentApp.myDatabase.delete_record(self.values[self.cursor_line][0])
-        self.parent.update_list()
 ################################################################################
-'''class EditMessage(npyscreen.ActionForm):
+class EditMessage(npyscreen.ActionForm):
     def create(self):
         global wgsender
         global wgtimestamp
@@ -91,8 +92,7 @@ class MessageRecordList(npyscreen.MultiLineAction):
             self.wgreciever.value = record[2]
             self.wgcontents.value   = record[3]
             wgtimestamp = record[4]
-            self.wg = record[5]
-            wg = record[6]
+
         else:
             self.name = "New Record"
             self.record_id          = ''
@@ -100,8 +100,7 @@ class MessageRecordList(npyscreen.MultiLineAction):
             self.wgreciever.value = ''
             self.wgcontents.value = ''
             wgtimestamp = ''
-            self.wg = ''
-            wg = ''
+
 
     def on_ok(self):
         if self.record_id: # We are editing an existing record
@@ -110,8 +109,6 @@ class MessageRecordList(npyscreen.MultiLineAction):
                                             reciever = self.wgreciever.value,
                                             contents = self.wgcontents.value,
                                             timestamp = wgtimestamp,
-                                             = wg,
-                                             = self.wg
                                             )
         else: # We are adding a new record.
             self.parentApp.myDatabase.add_record(
@@ -119,11 +116,8 @@ class MessageRecordList(npyscreen.MultiLineAction):
             reciever = self.wgreciever.value,
             contents = self.wgcontents.value,
             timestamp = wgtimestamp,
-             = wg,
-             = self.wg
             )
         self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
-'''

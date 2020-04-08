@@ -38,6 +38,7 @@ class gui(npyscreen.NPSAppManaged):
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)
+        self.addForm("EDITMESSAGE", EditMessage)
 
 if __name__ == '__main__':
     myApp = gui()

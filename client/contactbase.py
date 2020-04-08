@@ -57,6 +57,14 @@ class AddressDatabase(object):
         c.close()
         return records[0]
 
+    def user_get_record(self, record_id):
+        db = sqlite3.connect(self.dbfilename)
+        c = db.cursor()
+        c.execute('SELECT user_name from records WHERE record_internal_id=?', (record_id,))
+        records = c.fetchall()
+        c.close()
+        return records[0]
+
 #The main screen of the application will be a list of names. When the user selects a name, we will want to edit it. We will subclass MultiLineAction, and override display value to change how each record is presented. We will also override the method actionHighlighted to switch to the edit form when required. Finally, we will add two new keypresses - one to add and one to delete records. Before switching to the EDITRECORDFM, we either set its value to None, if creating a new form, or else set its value to that of the record we wish to edit.
 
 class RecordList(npyscreen.MultiLineAction):
@@ -70,7 +78,10 @@ class RecordList(npyscreen.MultiLineAction):
     def display_value(self, vl):
         return "%s, %s" % (vl[1], vl[2])
 
-    #def actionHighlighted(self, act_on_this, keypress):
+    def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
+        message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])
+        messages = self.parent.parentApp.myDatabase.get_record(message_sender)
+        self.parent.update_message_list(messages)
 
     def when_add_record(self, *args, **keywords):
         self.parent.parentApp.getForm('EDITRECORDFM').value = None
