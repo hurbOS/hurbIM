@@ -81,7 +81,7 @@ class RecordList(npyscreen.MultiLineAction):
 
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
         global recipient
-        message_sender = str(self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0]))
+        message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
         messages = self.parent.parentApp.myDatabase.get_record(message_sender)
         self.parent.update_message_list(messages)
 
