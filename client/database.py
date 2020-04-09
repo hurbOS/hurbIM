@@ -52,10 +52,10 @@ class MessageDatabase(object):
         c.close()
         return records
 
-    def get_record(self, record_id):
+    def get_record(self, message_reciever):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
-        c.execute('SELECT sender,timestamp,contents from records WHERE reciever=?', (record_id, ))
+        c.execute('SELECT sender,timestamp,contents from records WHERE reciever LIKE ?', (message_reciever, ))
         records = c.fetchall()
         c.close()
         return records[0]

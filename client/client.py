@@ -5,15 +5,31 @@ import sqlite3
 import time
 from database import *
 from contactbase import *
+global recipient
+class InputBox(npyscreen.MultiLineEdit):
+    def __init__(self, *args, **keywords):
+        super(InputBox, self).__init__(*args, **keywords)
+        self.add_handlers({
+            curses.ascii.NL: self.when_add_Message,
+        })
 
-class InputBox(npyscreen.BoxTitle):
-    _contained_widget = npyscreen.MultiLineEdit
+    def when_add_Message(self, *args, **keywords):
+        global wgsender
+        global wgtimestamp
+        wgsender = "UserName"
+        wgreciever = "thouu"
+        self.wgcontents  = self.value
+        wgtimestamp = datetime.datetime.now()
+
+        self.parentApp.myDatabase.add_record(
+        sender = wgsender,
+        reciever = self.wgreciever.value,
+        contents = self.wgcontents.value,
+        timestamp = wgtimestamp,
+        )
 
 class RecordListDisplay(npyscreen.Form):
     def create(self):
-        #self.add_handlers({
-        #    curses.ascii.NL:()
-        #})
         y, x = self.useable_space()
         self.ChatBox = self.add(RecordList, name="Chats", relx=2, max_width=x // 6, rely=1,
                                    max_height=0,values=[])

@@ -70,6 +70,7 @@ class AddressDatabase(object):
 class RecordList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
         super(RecordList, self).__init__(*args, **keywords)
+
         self.add_handlers({
             "^A": self.when_add_record,
             "^D": self.when_delete_record
@@ -79,7 +80,8 @@ class RecordList(npyscreen.MultiLineAction):
         return "%s, %s" % (vl[1], vl[2])
 
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
-        message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])
+        global recipient
+        message_sender = str(self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0]))
         messages = self.parent.parentApp.myDatabase.get_record(message_sender)
         self.parent.update_message_list(messages)
 
