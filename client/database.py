@@ -58,7 +58,7 @@ class MessageDatabase(object):
         c.execute('SELECT sender,timestamp,contents from records WHERE reciever=?', (message_reciever, ))
         records = c.fetchall()
         c.close()
-        return records[0]
+        return records[0:2]
 ################################################################################
 class MessageRecordList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
