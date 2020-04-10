@@ -1,11 +1,15 @@
 import curses
-from cryption import *
 import npyscreen
 import sqlite3
+import datetime
 import time
+import settings
+
+from cryption import *
 from database import *
 from contactbase import *
-global recipient
+
+
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
         super(InputBox, self).__init__(*args, **keywords)
@@ -14,19 +18,20 @@ class InputBox(npyscreen.MultiLineEdit):
         })
 
     def when_add_Message(self, *args, **keywords):
-        global wgsender
-        global wgtimestamp
         wgsender = "UserName"
-        wgreciever = "thouu"
+        wgreciever = settings.message_sender
         self.wgcontents  = self.value
         wgtimestamp = datetime.datetime.now()
 
-        self.parentApp.myDatabase.add_record(
+        self.parent.parentApp.myDatabase.add_record(
         sender = wgsender,
-        reciever = self.wgreciever.value,
-        contents = self.wgcontents.value,
+        reciever = wgreciever,
+        contents = self.wgcontents,
         timestamp = wgtimestamp,
         )
+        self.value = ""
+        messages = self.parent.parentApp.myDatabase.get_record(wgreciever)
+        self.parent.update_message_list(messages)
 
 class RecordListDisplay(npyscreen.Form):
     def create(self):
@@ -54,7 +59,6 @@ class gui(npyscreen.NPSAppManaged):
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)
-        self.addForm("EDITMESSAGE", EditMessage)
 
 if __name__ == '__main__':
     myApp = gui()

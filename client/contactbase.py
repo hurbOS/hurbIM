@@ -1,6 +1,7 @@
-import curses
 import npyscreen
 import sqlite3
+import settings
+from client import *
 
 class AddressDatabase(object):
     def __init__(self, filename="contacts.db"):
@@ -80,9 +81,8 @@ class RecordList(npyscreen.MultiLineAction):
         return "%s, %s" % (vl[1], vl[2])
 
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
-        global recipient
-        message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
-        messages = self.parent.parentApp.myDatabase.get_record(message_sender)
+        settings.message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
+        messages = self.parent.parentApp.myDatabase.get_record(settings.message_sender)
         self.parent.update_message_list(messages)
 
     def when_add_record(self, *args, **keywords):
