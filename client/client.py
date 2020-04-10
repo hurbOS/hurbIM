@@ -18,20 +18,22 @@ class InputBox(npyscreen.MultiLineEdit):
         })
 
     def when_add_Message(self, *args, **keywords):
-        wgsender = "UserName"
-        wgreciever = settings.message_sender
-        self.wgcontents  = self.value
-        wgtimestamp = datetime.datetime.now()
-
-        self.parent.parentApp.myDatabase.add_record(
-        sender = wgsender,
-        reciever = wgreciever,
-        contents = self.wgcontents,
-        timestamp = wgtimestamp,
-        )
-        self.value = ""
-        messages = self.parent.parentApp.myDatabase.get_record(wgreciever)
-        self.parent.update_message_list(messages)
+        try:
+            wgsender = "UserName"
+            wgreciever = settings.message_sender
+            self.wgcontents  = self.value
+            wgtimestamp = datetime.datetime.now()
+            self.parent.parentApp.myDatabase.add_record(
+            sender = wgsender,
+            reciever = wgreciever,
+            contents = self.wgcontents,
+            timestamp = wgtimestamp,
+            )
+            self.value = ""
+            messages = self.parent.parentApp.myDatabase.get_record(wgreciever)
+            self.parent.update_message_list(messages)
+        except:
+            self.value = ""
 
 class RecordListDisplay(npyscreen.Form):
     def create(self):
