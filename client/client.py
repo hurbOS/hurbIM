@@ -41,7 +41,17 @@ class RecordListDisplay(npyscreen.Form):
         self.ChatBox = self.add(RecordList, name="Chats", relx=2, max_width=x // 6, rely=1,
                                    max_height=0,values=[])
         self.MessageBox = self.add(MessageRecordList,name="Messages", rely=1, relx=(x // 5) + 1, max_height=-3,
-                                      custom_highlighting=True, highlighting_arr_color_data=[0],values=[])
+                                      custom_highlighting=True, highlighting_arr_color_data=[0],values=[
+                                      "██╗  ██╗██╗   ██╗██████╗ ██████╗     ██╗███╗   ███╗",\
+                                      "██║  ██║██║   ██║██╔══██╗██╔══██╗    ██║████╗ ████║",\
+                                      "███████║██║   ██║██████╔╝██████╔╝    ██║██╔████╔██║",\
+                                      "██╔══██║██║   ██║██╔══██╗██╔══██╗    ██║██║╚██╔╝██║",\
+                                      "██║  ██║╚██████╔╝██║  ██║██████╔╝    ██║██║ ╚═╝ ██║",\
+                                      "╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝     ╚═╝╚═╝     ╚═╝",\
+                                      "- Welcome to hurbIM, a free, open source messenger alternative.",\
+                                      "- To add a contact, type 'ctrl + a' while selecting the right hand bar", \
+                                      "- To select a contact, select it with enter from the right menu", \
+                                      "- For further help hit '?' to see a list of commands"])
         self.InputBox = self.add(InputBox, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
 
     def beforeEditing(self):
