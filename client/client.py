@@ -35,8 +35,9 @@ class InputBox(npyscreen.MultiLineEdit):
         except:
             self.value = ""
 
-class RecordListDisplay(npyscreen.Form):
+class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
+        self.name="HurbIM"
         y, x = self.useable_space()
         self.ChatBox = self.add(RecordList, name="Chats", relx=2, max_width=x // 6, rely=1,
                                    max_height=0,values=[])
