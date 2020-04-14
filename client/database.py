@@ -48,4 +48,6 @@ class MessageDatabase(object):
 class MessageRecordList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
         super(MessageRecordList, self).__init__(*args, **keywords)
+class BoxTitle3(npyscreen.BoxTitle):
+     _contained_widget = MessageRecordList
 ################################################################################

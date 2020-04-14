@@ -35,13 +35,16 @@ class InputBox(npyscreen.MultiLineEdit):
         except:
             self.value = ""
 
+class BoxTitle(npyscreen.BoxTitle):
+     _contained_widget = InputBox
+
 class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
         self.name="HurbIM"
         y, x = self.useable_space()
-        self.ChatBox = self.add(RecordList, name="Chats", relx=2, max_width=x // 6, rely=1,
+        self.ChatBox = self.add(BoxTitle2, name="Chats", relx=2, max_width=x // 6 +4, rely=1,
                                    max_height=0,values=[])
-        self.MessageBox = self.add(MessageRecordList,name="Messages", rely=1, relx=(x // 5) + 1, max_height=-3,
+        self.MessageBox = self.add(BoxTitle3,name="Messages", rely=1, relx=(x // 5) + 1, max_height=-3,
                                       custom_highlighting=True, highlighting_arr_color_data=[0],values=[
                                       "██╗  ██╗██╗   ██╗██████╗ ██████╗     ██╗███╗   ███╗",\
                                       "██║  ██║██║   ██║██╔══██╗██╔══██╗    ██║████╗ ████║",\
@@ -53,7 +56,7 @@ class RecordListDisplay(npyscreen.FormBaseNew):
                                       "- To add a contact, type 'ctrl + a' while selecting the right hand bar", \
                                       "- To select a contact, select it with enter from the right menu", \
                                       "- For further help hit '?' to see a list of commands"])
-        self.InputBox = self.add(InputBox, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
+        self.InputBox = self.add(BoxTitle, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
 
     def beforeEditing(self):
         self.update_list()

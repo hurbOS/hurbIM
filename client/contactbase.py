@@ -89,6 +89,9 @@ class RecordList(npyscreen.MultiLineAction):
     def when_delete_record(self, *args, **keywords):
         self.parent.parentApp.myDatabase2.delete_record(self.values[self.cursor_line][0])
         self.parent.update_list()
+
+class BoxTitle2(npyscreen.BoxTitle):
+     _contained_widget = RecordList
 ################################################################################
 class EditContact(npyscreen.ActionForm):
     def create(self):
