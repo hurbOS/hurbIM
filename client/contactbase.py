@@ -1,6 +1,7 @@
 import npyscreen
 import sqlite3
 import settings
+
 from client import *
 
 class AddressDatabase(object):
@@ -75,7 +76,7 @@ class RecordList(npyscreen.MultiLineAction):
         })
     _contained_widget = npyscreen.MultiLineAction
     def display_value(self, vl):
-        return "%s, %s" % (vl[1], vl[2])
+        return "%s" % (vl[1])
 
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
         settings.message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
