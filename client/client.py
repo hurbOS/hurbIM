@@ -5,7 +5,7 @@ import datetime
 import time
 import settings
 
-from cryption import *
+from encryption import *
 from database import *
 from contactbase import *
 
