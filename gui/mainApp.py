@@ -22,7 +22,7 @@ class LoginPage(FloatLayout):
         self.logo = Image(
             source="logo_white.png",
             padding=[10, 10, 10, 10],
-            size_hint
+            
         )
 
         self.username = TextInput(
