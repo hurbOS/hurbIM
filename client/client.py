@@ -11,6 +11,10 @@ from encryption import *
 from database import *
 from contactbase import *
 
+def on_closing(event=None):
+    my_msg.set("{quit}")
+    send()
+
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
         super(InputBox, self).__init__(*args, **keywords)
@@ -18,21 +22,25 @@ class InputBox(npyscreen.MultiLineEdit):
             curses.ascii.NL: self.when_add_Message,
         })
 
+    def receive(self, *args, **keywords):
+        while True:
+            try:
+                msg = client_socket.recv(BUFSIZ).decode("utf8")
+                self.parent.update_message(msg)
+
+            except OSError:
+                break
+
     def when_add_Message(self, *args, **keywords):
         try:
             wgsender = "UserName"
             wgreciever = settings.message_sender
             self.wgcontents  = self.value
             wgtimestamp = datetime.datetime.now()
-
-            self.parent.parentApp.myDatabase.add_record(
-            sender = wgsender,
-            reciever = wgreciever,
-            contents = self.wgcontents,
-            timestamp = wgtimestamp,
-            )
-            messages = self.parent.parentApp.myDatabase.get_record(wgreciever)
-            self.parent.update_message_list(messages)
+            
+            msg=bytes(wgsender+":"+wgreciever+":"+wgcontents+":"+wgtimestamp,"utf8")
+            client_socket.send(msg)
+            recieve()
         except:
             self.value = ""
 
@@ -78,14 +86,15 @@ class gui(npyscreen.NPSAppManaged):
         self.addForm("EDITRECORDFM", EditContact)
 
 if __name__ == '__main__':
-    #HOST = '127.0.0.1'
-    #PORT = 6900
+    #top.protocol("WM_DELETE_WINDOW", on_closing)
+    HOST = '127.0.0.1'
+    PORT = 6900
 
-    #BUFSIZ = 1024
-    #ADDR = (HOST, PORT)
+    BUFSIZ = 1024
+    ADDR = (HOST, PORT)
 
-    #client_socket = socket(AF_INET, SOCK_STREAM)
-    #client_socket.connect(ADDR)
+    client_socket = socket(AF_INET, SOCK_STREAM)
+    client_socket.connect(ADDR)
 
     #receive_thread = Thread(target=receive)
     #receive_thread.start()
