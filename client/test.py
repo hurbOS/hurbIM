@@ -1,111 +1,63 @@
-import asyncio
-import tornado.escape
-import tornado.ioloop
-import tornado.locks
-import tornado.web
-import os.path
-import uuid
+#!/usr/bin/env python3
+"""Script for Tkinter GUI chat client."""
+from socket import AF_INET, socket, SOCK_STREAM
+from threading import Thread
+import tkinter
 
-from tornado.options import define, options, parse_command_line
+def receive():
+    """Handles receiving of messages."""
+    while True:
+        try:
+            msg = client_socket.recv(BUFSIZ).decode("utf8")
+            msg_list.insert(tkinter.END, msg)
+        except OSError:  # Possibly client has left the chat.
+            break
 
-define("port", default=8888, help="run on the given port", type=int)
-define("debug", default=True, help="run in debug mode")
+def send(event=None):  # event is passed by binders.
+    """Handles sending of messages."""
+    msg = my_msg.get()
+    my_msg.set("")  # Clears input field.
+    client_socket.send(bytes(msg, "utf8"))
+    if msg == "{quit}":
+        client_socket.close()
+        top.quit()
 
+def on_closing(event=None):
+    """This function is to be called when the window is closed."""
+    my_msg.set("{quit}")
+    send()
 
-class MessageBuffer(object):
-    def __init__(self):
-        # cond is notified whenever the message cache is updated
-        self.cond = tornado.locks.Condition()
-        self.cache = []
-        self.cache_size = 200
+top = tkinter.Tk()
+top.title("Chatter")
 
-    def get_messages_since(self, cursor):
-        """Returns a list of messages newer than the given cursor.
-        ``cursor`` should be the ``id`` of the last message received.
-        """
-        results = []
-        for msg in reversed(self.cache):
-            if msg["id"] == cursor:
-                break
-            results.append(msg)
-        results.reverse()
-        return results
+messages_frame = tkinter.Frame(top)
+my_msg = tkinter.StringVar()  # For the messages to be sent.
+scrollbar = tkinter.Scrollbar(messages_frame)  # To navigate through past messages.
+# Following will contain the messages.
+msg_list = tkinter.Listbox(messages_frame, height=15, width=50, yscrollcommand=scrollbar.set)
+scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+msg_list.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
+msg_list.pack()
+messages_frame.pack()
 
-    def add_message(self, message):
-        self.cache.append(message)
-        if len(self.cache) > self.cache_size:
-            self.cache = self.cache[-self.cache_size :]
-        self.cond.notify_all()
+entry_field = tkinter.Entry(top, textvariable=my_msg)
+entry_field.bind("<Return>", send)
+entry_field.pack()
+send_button = tkinter.Button(top, text="Send", command=send)
+send_button.pack()
 
+top.protocol("WM_DELETE_WINDOW", on_closing)
 
-# Making this a non-singleton is left as an exercise for the reader.
-global_message_buffer = MessageBuffer()
+#----Now comes the sockets part----
+HOST = '127.0.0.1'
+PORT = 6900
 
+BUFSIZ = 1024
+ADDR = (HOST, PORT)
 
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html", messages=global_message_buffer.cache)
+client_socket = socket(AF_INET, SOCK_STREAM)
+client_socket.connect(ADDR)
 
-
-class MessageNewHandler(tornado.web.RequestHandler):
-    """Post a new message to the chat room."""
-
-    def post(self):
-        message = {"id": str(uuid.uuid4()), "body": self.get_argument("body")}
-        # render_string() returns a byte string, which is not supported
-        # in json, so we must convert it to a character string.
-        message["html"] = tornado.escape.to_unicode(
-            self.render_string("message.html", message=message)
-        )
-        if self.get_argument("next", None):
-            self.redirect(self.get_argument("next"))
-        else:
-            self.write(message)
-        global_message_buffer.add_message(message)
-
-
-class MessageUpdatesHandler(tornado.web.RequestHandler):
-    """Long-polling request for new messages.
-    Waits until new messages are available before returning anything.
-    """
-
-    async def post(self):
-        cursor = self.get_argument("cursor", None)
-        messages = global_message_buffer.get_messages_since(cursor)
-        while not messages:
-            # Save the Future returned here so we can cancel it in
-            # on_connection_close.
-            self.wait_future = global_message_buffer.cond.wait()
-            try:
-                await self.wait_future
-            except asyncio.CancelledError:
-                return
-            messages = global_message_buffer.get_messages_since(cursor)
-        if self.request.connection.stream.closed():
-            return
-        self.write(dict(messages=messages))
-
-    def on_connection_close(self):
-        self.wait_future.cancel()
-
-
-def main():
-    parse_command_line()
-    app = tornado.web.Application(
-        [
-            (r"/", MainHandler),
-            (r"/a/message/new", MessageNewHandler),
-            (r"/a/message/updates", MessageUpdatesHandler),
-        ],
-        cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
-        template_path=os.path.join(os.path.dirname(__file__), "templates"),
-        static_path=os.path.join(os.path.dirname(__file__), "static"),
-        xsrf_cookies=True,
-        debug=options.debug,
-    )
-    app.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
-
-
-if __name__ == "__main__":
-    main()
+receive_thread = Thread(target=receive)
+receive_thread.start()
+tkinter.mainloop()  # Starts GUI execution.

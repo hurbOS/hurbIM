@@ -28,15 +28,6 @@ class MessageDatabase(object):
         db.commit()
         c.close()
 
-    def update_record(self, record_id, sender = '', reciever='',contents='',timestamp=''):
-        db = sqlite3.connect(self.dbfilename)
-        c = db.cursor()
-        c.execute('UPDATE records set sender=?, reciever=?,contents=?,timestamp=?\
-                    WHERE record_internal_id=?', (sender,reciever,contents,timestamp, \
-                                                        record_id))
-        db.commit()
-        c.close()
-
     def get_record(self, message_reciever):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()

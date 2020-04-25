@@ -11,26 +11,6 @@ from encryption import *
 from database import *
 from contactbase import *
 
-
-def receive():
-    """Handles receiving of messages."""
-    while True:
-        try:
-            msg = client_socket.recv(BUFSIZ).decode("utf8")
-            msg_list.insert(tkinter.END, msg)
-        except OSError:  # Possibly client has left the chat.
-            break
-
-
-def send(event=None):  # event is passed by binders.
-    """Handles sending of messages."""
-    msg = my_msg.get()
-    my_msg.set("")  # Clears input field.
-    client_socket.send(bytes(msg, "utf8"))
-    if msg == "{quit}":
-        client_socket.close()
-        top.quit()
-
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
         super(InputBox, self).__init__(*args, **keywords)
@@ -51,8 +31,6 @@ class InputBox(npyscreen.MultiLineEdit):
             contents = self.wgcontents,
             timestamp = wgtimestamp,
             )
-
-            self.value = ""
             messages = self.parent.parentApp.myDatabase.get_record(wgreciever)
             self.parent.update_message_list(messages)
         except:
@@ -100,16 +78,16 @@ class gui(npyscreen.NPSAppManaged):
         self.addForm("EDITRECORDFM", EditContact)
 
 if __name__ == '__main__':
-    HOST = 'hurbindustries.net'
-    PORT = 33000
+    #HOST = '127.0.0.1'
+    #PORT = 6900
 
-    BUFSIZ = 1024
-    ADDR = (HOST, PORT)
+    #BUFSIZ = 1024
+    #ADDR = (HOST, PORT)
 
-    client_socket = socket(AF_INET, SOCK_STREAM)
-    client_socket.connect(ADDR)
+    #client_socket = socket(AF_INET, SOCK_STREAM)
+    #client_socket.connect(ADDR)
 
-    receive_thread = Thread(target=receive)
-    receive_thread.start()
+    #receive_thread = Thread(target=receive)
+    #receive_thread.start()
     myApp = gui()
     myApp.run()

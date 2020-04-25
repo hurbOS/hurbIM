@@ -26,15 +26,6 @@ class AddressDatabase(object):
         db.commit()
         c.close()
 
-    def update_record(self, record_id, user_name = ''):
-        db = sqlite3.connect(self.dbfilename)
-        c = db.cursor()
-        c.execute('UPDATE records set user_name=? \
-                    WHERE record_internal_id=?', (user_name, \
-                                                        record_id))
-        db.commit()
-        c.close()
-
     def delete_record(self, record_id):
         db = sqlite3.connect(self.dbfilename)
         c = db.cursor()
@@ -49,14 +40,6 @@ class AddressDatabase(object):
         records = c.fetchall()
         c.close()
         return records
-
-    def get_record(self, record_id):
-        db = sqlite3.connect(self.dbfilename)
-        c = db.cursor()
-        c.execute('SELECT * from records WHERE record_internal_id=?', (record_id,))
-        records = c.fetchall()
-        c.close()
-        return records[0]
 
     def user_get_record(self, record_id):
         db = sqlite3.connect(self.dbfilename)
