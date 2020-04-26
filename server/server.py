@@ -1,40 +1,9 @@
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
-import datetime
-import sqlite3
 import configure
-
-class MessageDatabase(object):
-    def __init__(self):
-        db = sqlite3.connect(configure.dbfilename)
-        c = db.cursor()
-        c.execute(
-        "CREATE TABLE IF NOT EXISTS records\
-            ( record_internal_id INTEGER PRIMARY KEY, \
-              sender        TEXT, \
-              reciever      TEXT, \
-              contents      TEXT, \
-              timestamp     TEXT  \
-              )" \
-            )
-        db.commit()
-        c.close()
-
-    def add_record(sender = '', reciever='',contents='',timestamp=''):
-        db = sqlite3.connect(configure.dbfilename)
-        c = db.cursor()
-        c.execute('INSERT INTO records(sender,reciever,contents,timestamp) \
-                    VALUES(?,?,?,?)', (sender,reciever,contents,timestamp))
-        db.commit()
-        c.close()
-
-    def get_record(message_reciever):
-        db = sqlite3.connect(configure.dbfilename)
-        c = db.cursor()
-        c.execute('SELECT sender,contents,timestamp from records WHERE reciever=?', (message_reciever, ))
-        records = c.fetchall()
-        c.close()
-        return records
+import time
+import messagedb
+import userdb
 
 def accept_incoming_connections():
     while True:
@@ -43,6 +12,15 @@ def accept_incoming_connections():
         Thread(target=handle_client, args=(client,)).start()
 
 def handle_client(client):
+    authmsg = client.recv(BUFSIZ)
+    dec = authmsg.decode("utf-8")
+    if(dec!=""):
+        splitter = dec.split(':')
+        if(userdb.UserDatabase.get_record(splitter[0])==[]):
+            print("Uh Oh!")
+        else:
+            if(userdb.UserDatabase.get_precord(splitter[1])==[]):
+                print("Uh Oh Again!")
     while True:
         msg = client.recv(BUFSIZ)
         if not msg:
@@ -50,16 +28,17 @@ def handle_client(client):
         wgsender='UserName'
         wgreciever='User2'
         wgcontents=msg.decode("utf-8")
-        wgtimestamp=str(datetime.datetime.now())
+        wgtimestamp=str(time.ctime())
         #out = bytes(wgtimestamp + " - " +  wgsender + ": " + wgcontents, "utf8")
-        #client.send(out)
-        MessageDatabase.add_record(sender=wgsender,reciever=wgreciever,contents=wgcontents,timestamp=wgtimestamp)
+        #client.send(bytes("hey hey","utf8"))
+        messagedb.MessageDatabase.add_record(sender=wgsender,reciever=wgreciever,contents=wgcontents,timestamp=wgtimestamp)
+        print(messagedb.MessageDatabase.get_records())
 
 clients = {}
 addresses = {}
 
 HOST = ''
-PORT = 6901
+PORT = 6900
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
 
@@ -67,7 +46,8 @@ SERVER = socket(AF_INET, SOCK_STREAM)
 SERVER.bind(ADDR)
 
 if __name__ == "__main__":
-    MessageDatabase()
+    messagedb.MessageDatabase()
+    userdb.UserDatabase()
     SERVER.listen(5)
     ACCEPT_THREAD = Thread(target=accept_incoming_connections)
     ACCEPT_THREAD.start()

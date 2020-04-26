@@ -7,6 +7,7 @@ def init():
 global cipher
 global user
 global passw
+global welcome
 
 key = Fernet.generate_key()
 cipher = Fernet(key)

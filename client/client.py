@@ -1,14 +1,15 @@
 import curses
 import npyscreen
-import datetime
+import time
 import settings
+import auth
 
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 from encryption import *
-from database import *
 from contactbase import *
-
+from tui import *
+################################################################################
 def receive(self, *args, **keywords):
        while True:
            try:
@@ -17,22 +18,19 @@ def receive(self, *args, **keywords):
 
            except OSError:
                break
-
+################################################################################
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
         super(InputBox, self).__init__(*args, **keywords)
         self.add_handlers({
             curses.ascii.NL: self.when_add_Message,
         })
-
-
     def when_add_Message(self, *args, **keywords):
         try:
             if(self.value!=""):
                 wgsender = settings.user
                 wgreciever = settings.message_sender
                 self.wgcontents  = self.value
-
                 msg=bytes(self.wgcontents,"utf8")
                 client_socket.send(msg)
                 self.value=""
@@ -41,7 +39,7 @@ class InputBox(npyscreen.MultiLineEdit):
 
 class BoxTitle(npyscreen.BoxTitle):
      _contained_widget = InputBox
-
+################################################################################
 class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
         self.name="HurbIM"
@@ -59,7 +57,9 @@ class RecordListDisplay(npyscreen.FormBaseNew):
                                       "- Welcome to hurbIM, a free, open source messenger alternative.",\
                                       "- To add a contact, type 'ctrl + a' while selecting the right hand bar", \
                                       "- To select a contact, select it with enter from the right menu", \
-                                      "- For further help hit '?' to see a list of commands"])
+                                      "- For further help hit '?' to see a list of commands"\
+                                      ]
+)
         self.InputBox = self.add(BoxTitle, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
 
     def beforeEditing(self):
@@ -72,24 +72,23 @@ class RecordListDisplay(npyscreen.FormBaseNew):
     def update_message_list(self, messagelist):
         self.MessageBox.values = messagelist
         self.MessageBox.display()
-
+################################################################################
 class gui(npyscreen.NPSAppManaged):
     def onStart(self):
-        self.myDatabase = MessageDatabase()
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)
-
+################################################################################
 if __name__ == '__main__':
     HOST = '127.0.0.1'
-    PORT = 6901
+    PORT = 6900
 
     BUFSIZ = 1024
     ADDR = (HOST, PORT)
 
     client_socket = socket(AF_INET, SOCK_STREAM)
     client_socket.connect(ADDR)
-
+    auth.authenticate(client_socket)
     receive_thread = Thread(target=receive)
     receive_thread.start()
     myApp = gui()

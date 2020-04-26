@@ -1,8 +1,4 @@
-import npyscreen
 import sqlite3
-import settings
-
-from client import *
 
 class AddressDatabase(object):
     def __init__(self, filename="contacts.db"):
@@ -48,49 +44,3 @@ class AddressDatabase(object):
         records = c.fetchall()
         c.close()
         return records[0]
-################################################################################
-class RecordList(npyscreen.MultiLineAction):
-    def __init__(self, *args, **keywords):
-        super(RecordList, self).__init__(*args, **keywords)
-
-        self.add_handlers({
-            "^A": self.when_add_record,
-            "^D": self.when_delete_record
-        })
-    _contained_widget = npyscreen.MultiLineAction
-    def display_value(self, vl):
-        return "%s" % (vl[1])
-
-    def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
-        settings.message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
-        messages = self.parent.parentApp.myDatabase.get_record(settings.message_sender)
-        self.parent.update_message_list(messages)
-
-    def when_add_record(self, *args, **keywords):
-        self.parent.parentApp.getForm('EDITRECORDFM').value = None
-        self.parent.parentApp.switchForm('EDITRECORDFM')
-
-    def when_delete_record(self, *args, **keywords):
-        self.parent.parentApp.myDatabase2.delete_record(self.values[self.cursor_line][0])
-        self.parent.update_list()
-
-class BoxTitle2(npyscreen.BoxTitle):
-     _contained_widget = RecordList
-################################################################################
-class EditContact(npyscreen.ActionForm):
-    def create(self):
-        self.value = None
-        self.wgUserName   = self.add(npyscreen.TitleText, name = "User Name:",)
-
-    def beforeEditing(self):
-        self.name = 'New Contact'
-        self.record_id          = ''
-        self.wgUserName.value   = ''
-
-    def on_ok(self):
-         # We are adding a new record.
-        self.parentApp.myDatabase2.add_record(user_name=self.wgUserName.value)
-        self.parentApp.switchFormPrevious()
-
-    def on_cancel(self):
-        self.parentApp.switchFormPrevious()

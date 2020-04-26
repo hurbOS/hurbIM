@@ -1,5 +1,5 @@
 # hurbIM
-Hurb's official Instant Messenger. Made with Python. Developed by Wilson, Pyrrh0_ and Dreamsmasher
+Hurb's official Instant Messenger. Made with Pythona and developed by Wilson, Pyrrh0_ and Dreamsmasher.
 
 ## Overall Progress [UPDATES]
 [Sun Apr 26, 11:51]
@@ -12,7 +12,7 @@ Hurb's official Instant Messenger. Made with Python. Developed by Wilson, Pyrrh0
 - TODO:
     - "Pull" data from server
     - User accounts (handled by website)
-    - Security and encryption
+    - Security -  authentication and encryption
     - Extra features from #hurbim-feature-requests
 
 ## Pyrrh0_'s fork [UPDATES]
