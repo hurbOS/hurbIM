@@ -1,7 +1,7 @@
 # hurbIM
 Hurb's official Instant Messenger. Made with Pythona and developed by Wilson, Pyrrh0_ and Dreamsmasher.
 
-## Overall Progress [UPDATES]
+## Overall Progress
 [Sun Apr 26, 11:51]
 
 - Somwhat Completed:
@@ -15,14 +15,6 @@ Hurb's official Instant Messenger. Made with Pythona and developed by Wilson, Py
     - Security -  authentication and encryption
     - Extra features from #hurbim-feature-requests
 
-## Pyrrh0_'s fork [UPDATES]
-[Wed Apr 22, 13:19]
+## Wilson's Code [UPDATES](WilsonUpdateLogs)
 
-- Created a kivy application       
-    - Designed Base Structure of the GUI    
-    - Designed Login screen. (Currently a clusterf**k but minor changes are required)     
-    - Created base classes for the main chat app and the create account sceen        
-
-- Created UpdateLogs file
-- Created the hurbIM logo - black version and white version with border (Check gui)   
-- Added vscode settings to .gitignore
+## Pyrrh0_'s Code [UPDATES](Pyrrh0_UpdateLogs)

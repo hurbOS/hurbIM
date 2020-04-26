@@ -14,6 +14,7 @@ def receive(self, *args, **keywords):
        while True:
            try:
                msg = client_socket.recv(BUFSIZ).decode("utf8")
+
                InputBox.update_message_list(msg)
 
            except OSError:
@@ -29,9 +30,9 @@ class InputBox(npyscreen.MultiLineEdit):
         try:
             if(self.value!=""):
                 wgsender = settings.user
-                wgreciever = settings.message_sender
+                wgreciever = settings.message_reciever
                 self.wgcontents  = self.value
-                msg=bytes(self.wgcontents,"utf8")
+                msg=bytes(wgsender+":"+wgreciever+":"+self.wgcontents,"utf8")
                 client_socket.send(msg)
                 self.value=""
         except:
@@ -81,7 +82,7 @@ class gui(npyscreen.NPSAppManaged):
 ################################################################################
 if __name__ == '__main__':
     HOST = '127.0.0.1'
-    PORT = 6900
+    PORT = 6901
 
     BUFSIZ = 1024
     ADDR = (HOST, PORT)

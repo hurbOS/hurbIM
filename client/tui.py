@@ -12,8 +12,8 @@ class RecordList(npyscreen.MultiLineAction):
     def display_value(self, vl):
         return "%s" % (vl[1])
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
-        settings.message_sender = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
-        #messages = self.parent.parentApp.myDatabase.get_record(settings.message_sender)
+        settings.message_reciever = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
+        #messages = self.parent.parentApp.myDatabase.get_record(settings.message_reciever)
         self.parent.update_message_list("")
 
     def when_add_record(self, *args, **keywords):

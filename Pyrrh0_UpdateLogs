@@ -1,0 +1,17 @@
+[Thur Apr 23, 03:08]
+
+- Kivy Application
+    - Fixed Login screen, looks more sensible.
+    - Getting a Criticial warning, Clock.max_iteration
+    - Added Roboto Condensed Regular Font
+
+[Wed Apr 22, 13:14]
+
+- Created a kivy application
+    - Designed Base Structure of the GUI
+    - Designed Login screen. (Currently a clusterf**k but minor changes are required)
+    - Created base classes for the main chat app and the create account sceen
+
+- Created the hurbIM logo - black version and white version with border (Check gui/)
+
+- Added vscode settings to .gitignore
