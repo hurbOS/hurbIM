@@ -5,5 +5,10 @@ def init():
     message_sender = ""
 
 global cipher
+global user
+global passw
+
 key = Fernet.generate_key()
 cipher = Fernet(key)
+user = "UserName"
+passw = "password"

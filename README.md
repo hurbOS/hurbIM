@@ -2,14 +2,15 @@
 Hurb's official Instant Messenger. Made with Python. Developed by Wilson, Pyrrh0_ and Dreamsmasher
 
 ## Overall Progress [UPDATES]
-[Sat Apr 25, 22:13]
+[Sun Apr 26, 11:51]
 
-- In Progress:
-    - Npyscreen (Linux) and Kivy (Windows + Linux) user interfaces in Progress
+- Somwhat Completed:
+    - Npyscreen (Linux) and Kivy (Windows + Linux) user interfaces
     - Server sockets and sql handling
+    - "Push" data to server
 
 - TODO:
-    - "Pull" and "Push" data to/from SERVER
+    - "Pull" data from server
     - User accounts (handled by website)
     - Security and encryption
     - Extra features from #hurbim-feature-requests

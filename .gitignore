@@ -1,3 +1,7 @@
+#database files
+messages.db
+contacts.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -130,4 +134,3 @@ dmypy.json
 
 #VS code stuff
 .vscode
-

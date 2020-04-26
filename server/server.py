@@ -44,20 +44,22 @@ def accept_incoming_connections():
 
 def handle_client(client):
     while True:
-        msg = client.recv(BUFSIZ)    
+        msg = client.recv(BUFSIZ)
+        if not msg:
+            break
         wgsender='UserName'
         wgreciever='User2'
         wgcontents=msg.decode("utf-8")
         wgtimestamp=str(datetime.datetime.now())
-        out = bytes(wgtimestamp + " - " +  wgsender + ": " + wgcontents, "utf8")
-        client.send(out)
+        #out = bytes(wgtimestamp + " - " +  wgsender + ": " + wgcontents, "utf8")
+        #client.send(out)
         MessageDatabase.add_record(sender=wgsender,reciever=wgreciever,contents=wgcontents,timestamp=wgtimestamp)
-    
+
 clients = {}
 addresses = {}
 
 HOST = ''
-PORT = 6900
+PORT = 6901
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
 

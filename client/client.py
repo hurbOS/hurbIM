@@ -1,8 +1,6 @@
 import curses
 import npyscreen
-import sqlite3
 import datetime
-import time
 import settings
 
 from socket import AF_INET, socket, SOCK_STREAM
@@ -11,9 +9,14 @@ from encryption import *
 from database import *
 from contactbase import *
 
-def on_closing(event=None):
-    my_msg.set("{quit}")
-    send()
+def receive(self, *args, **keywords):
+       while True:
+           try:
+               msg = client_socket.recv(BUFSIZ).decode("utf8")
+               InputBox.update_message_list(msg)
+
+           except OSError:
+               break
 
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
@@ -22,25 +25,17 @@ class InputBox(npyscreen.MultiLineEdit):
             curses.ascii.NL: self.when_add_Message,
         })
 
-    def receive(self, *args, **keywords):
-        while True:
-            try:
-                msg = client_socket.recv(BUFSIZ).decode("utf8")
-                self.parent.update_message(msg)
-
-            except OSError:
-                break
 
     def when_add_Message(self, *args, **keywords):
         try:
-            wgsender = "UserName"
-            wgreciever = settings.message_sender
-            self.wgcontents  = self.value
-            wgtimestamp = datetime.datetime.now()
-            
-            msg=bytes(wgsender+":"+wgreciever+":"+wgcontents+":"+wgtimestamp,"utf8")
-            client_socket.send(msg)
-            recieve()
+            if(self.value!=""):
+                wgsender = settings.user
+                wgreciever = settings.message_sender
+                self.wgcontents  = self.value
+
+                msg=bytes(self.wgcontents,"utf8")
+                client_socket.send(msg)
+                self.value=""
         except:
             self.value = ""
 
@@ -86,9 +81,8 @@ class gui(npyscreen.NPSAppManaged):
         self.addForm("EDITRECORDFM", EditContact)
 
 if __name__ == '__main__':
-    #top.protocol("WM_DELETE_WINDOW", on_closing)
     HOST = '127.0.0.1'
-    PORT = 6900
+    PORT = 6901
 
     BUFSIZ = 1024
     ADDR = (HOST, PORT)
@@ -96,7 +90,7 @@ if __name__ == '__main__':
     client_socket = socket(AF_INET, SOCK_STREAM)
     client_socket.connect(ADDR)
 
-    #receive_thread = Thread(target=receive)
-    #receive_thread.start()
+    receive_thread = Thread(target=receive)
+    receive_thread.start()
     myApp = gui()
     myApp.run()
