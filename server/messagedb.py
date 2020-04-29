@@ -10,7 +10,7 @@ class MessageDatabase(object):
         "CREATE TABLE IF NOT EXISTS records\
             ( record_internal_id INTEGER PRIMARY KEY, \
               sender        TEXT, \
-              reciever      TEXT, \
+              receiver      TEXT, \
               contents      TEXT, \
               timestamp     TEXT  \
               )" \
@@ -18,42 +18,28 @@ class MessageDatabase(object):
         db.commit()
         c.close()
 
-    def add_record(sender = '', reciever='',contents='',timestamp=''):
+    def add_record(sender = '', receiver='',contents='',timestamp=''):
         db = sqlite3.connect(configure.dbfilename)
         c = db.cursor()
-        c.execute('INSERT INTO records(sender,reciever,contents,timestamp) \
-                    VALUES(?,?,?,?)', (sender,reciever,contents,timestamp))
+        c.execute('INSERT INTO records(sender,receiver,contents,timestamp) \
+                    VALUES(?,?,?,?)', (sender,receiver,contents,timestamp))
         db.commit()
         c.close()
-
-    def get_record(message_reciever):
-        db = sqlite3.connect(configure.dbfilename)
-        c = db.cursor()
-        c.execute('SELECT sender,contents,timestamp from records WHERE reciever=?', (message_reciever, ))
-        records = c.fetchall()
-        c.close()
-        return records
-
-    def get_records():
-        db = sqlite3.connect(configure.dbfilename)
-        c = db.cursor()
-        c.execute('SELECT * from records')
-        records = c.fetchall()
-        c.close()
-        return records
 
     def output_messages(user1,user2):
         db = sqlite3.connect(configure.dbfilename)
         c = db.cursor()
-        c.execute('SELECT * from records WHERE sender=? AND reciever=?', (user1,user2))
+        c.execute('SELECT * from records WHERE sender=? AND receiver=?', (user1,user2))
         records = c.fetchall()
-        c.execute('SELECT * from records WHERE sender=? AND reciever=?', (user2,user1))
+        c.execute('SELECT * from records WHERE sender=? AND receiver=?', (user2,user1))
         records2 = c.fetchall()
         c.close()
-        merged = []
+        merged=[]
         for item in records:
-            merged.append(item)
+            stringy = str(item)
+            merged.append(bytes(stringy, "utf8"))
         for item in records2:
-            merged.append(item)
+            stringy2 = str(item)
+            merged.append(bytes(stringy2, "utf8"))
         merged.sort(key=itemgetter(0))
         return merged

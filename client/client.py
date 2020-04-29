@@ -9,17 +9,15 @@ from threading import Thread
 from encryption import *
 from contactbase import *
 from tui import *
-################################################################################
-def receive(self, *args, **keywords):
-       while True:
-           try:
-               msg = client_socket.recv(BUFSIZ).decode("utf8")
 
-               InputBox.update_message_list(msg)
+def receive():
+    while True:
+            msg = client_socket.recv(BUFSIZ)
+            if not msg:
+                break
+            readable = msg.decode("utf8")
+            RecordListDisplay.update_message_list(readable)
 
-           except OSError:
-               break
-################################################################################
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
         super(InputBox, self).__init__(*args, **keywords)
@@ -27,20 +25,20 @@ class InputBox(npyscreen.MultiLineEdit):
             curses.ascii.NL: self.when_add_Message,
         })
     def when_add_Message(self, *args, **keywords):
-        try:
-            if(self.value!=""):
-                wgsender = settings.user
-                wgreciever = settings.message_reciever
-                self.wgcontents  = self.value
-                msg=bytes(wgsender+":"+wgreciever+":"+self.wgcontents,"utf8")
-                client_socket.send(msg)
-                self.value=""
-        except:
-            self.value = ""
+        #try:
+        if(self.value!=""):
+            wgsender = settings.user
+            wgreceiver = settings.message_receiver
+            self.wgcontents  = self.value
+            msg=bytes(wgsender+":"+wgreceiver+":"+self.wgcontents,"utf8")
+            client_socket.send(msg)
+            self.value=""
+    #    except:
+    #        self.value = ""
 
 class BoxTitle(npyscreen.BoxTitle):
      _contained_widget = InputBox
-################################################################################
+
 class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
         self.name="HurbIM"
@@ -73,20 +71,20 @@ class RecordListDisplay(npyscreen.FormBaseNew):
     def update_message_list(self, messagelist):
         self.MessageBox.values = messagelist
         self.MessageBox.display()
-################################################################################
+
 class gui(npyscreen.NPSAppManaged):
     def onStart(self):
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)
-################################################################################
-if __name__ == '__main__':
+
+def display():
     HOST = '127.0.0.1'
     PORT = 6901
 
     BUFSIZ = 1024
     ADDR = (HOST, PORT)
-
+    global client_socket
     client_socket = socket(AF_INET, SOCK_STREAM)
     client_socket.connect(ADDR)
     auth.authenticate(client_socket)
@@ -94,3 +92,9 @@ if __name__ == '__main__':
     receive_thread.start()
     myApp = gui()
     myApp.run()
+
+b = Thread(name='background1', target=receive)
+f = Thread(name='foreground', target=display)
+
+b.start()
+f.start()

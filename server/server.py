@@ -12,33 +12,36 @@ def accept_incoming_connections():
         Thread(target=handle_client, args=(client,)).start()
 
 def handle_client(client):
-    authmsg = client.recv(BUFSIZ)
-    dec = authmsg.decode("utf-8")
-    if(dec!=""):
-        splitter = dec.split(':')
-        if(userdb.UserDatabase.get_record(splitter[0])==[]):
-            client.close()
-        else:
-            if(userdb.UserDatabase.get_precord(splitter[1])==[]):
+    try:
+
+        authmsg = client.recv(BUFSIZ)
+        dec = authmsg.decode("utf-8")
+        if(dec!=""):
+            splitter = dec.split(':')
+            if(userdb.UserDatabase.get_record(splitter[0])==[]):
                 client.close()
             else:
-                print("connected")
-                while True:
-                    try:
-                        msg = client.recv(BUFSIZ)
-                        if not msg:
-                            break
-                        msgsplitter=msg.decode("utf-8").split(':')
-                        wgsender=msgsplitter[0]
-                        wgreciever=msgsplitter[1]
-                        wgcontents=msgsplitter[2]
-                        wgtimestamp=str(time.ctime())
-                        #out = output_messages(wgsender,wgreciever,wgreciever,wgsender)
-                        #client.send(bytes(out,"utf8"))
-                        messagedb.MessageDatabase.add_record(sender=wgsender,reciever=wgreciever,contents=wgcontents,timestamp=wgtimestamp)
-                        print(messagedb.MessageDatabase.output_messages(wgsender,wgreciever))
-                    except:
-                        break
+                if(userdb.UserDatabase.get_precord(splitter[1])==[]):
+                    client.close()
+                else:
+                    print("connected")
+                    while True:
+                            msg = client.recv(BUFSIZ)
+                            if not msg:
+                                break
+                            msgsplitter=msg.decode("utf-8").split(':')
+                            print("received")
+                            wgsender=msgsplitter[0]
+                            wgreceiver=msgsplitter[1]
+                            wgcontents=msgsplitter[2]
+                            wgtimestamp=str(time.ctime())
+                            messagedb.MessageDatabase.add_record(sender=wgsender,receiver=wgreceiver,contents=wgcontents,timestamp=wgtimestamp)
+                            sendable = messagedb.MessageDatabase.output_messages(wgsender,wgreceiver)
+                            for item in sendable:
+                                print(item)
+                                client.send(item)
+    except:
+        print("client side error")
 
 clients = {}
 addresses = {}

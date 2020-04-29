@@ -1,11 +1,22 @@
+[Pre Sun Apr 26]
+ - Npyscreen main page - Contact list, Message output and Message input.
+ - Contacts database system (sqlite3)
+ - Simple local socket server (to be hosted on domain later)
+ - Welcome screen for client
+
 [Sun Apr 26, 18:02]
  - You can now connect to the server script, although it is not running on our domain yet.
  - There is now the beginning of server authentication, though proper user accounts will come later.
  - Using the npyscreen tui, it is possible to send messages to the server through ports, which are then logged in a database.
  - All the client side and server side code has been cleaned up and compartmentalised into more several more files.
 
-[Mon Apr 27, 00:]
+[Mon Apr 27, 00:10]
  - Relatively good server authentication: must have matching password and username to one in database(still needs work).
  - Several users can connect and disconnect without trouble.
  - Improved message sending, uses string maniulation to send all informaton in one string.
  - Database improvements - uses sender and reciever data to select specific database records to return.
+
+[Wed Apr 29, 23:01]
+ - Finally created server side message output, using str() and some luck.
+ - Begun client side message output though it may need speed improvements eventually.
+ - Cleanup and bugfixes

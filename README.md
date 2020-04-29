@@ -11,7 +11,7 @@ Hurb's official Instant Messenger. Made with Pythona and developed by Wilson, Py
 
 - TODO:
     - "Pull" data from server
-    - User accounts (handled by website)
+    - User accounts (handled by website?)
     - Security -  authentication and encryption
     - Extra features from #hurbim-feature-requests
 
