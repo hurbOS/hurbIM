@@ -1,0 +1,47 @@
+<LoginPage>:
+    FloatLayout:
+        Image:
+            source: "logo_white.png"
+            size_hint: (0.8, 0.4)
+            pos_hint: {"center_x": 0.5, "center_y": 0.7}
+           
+        TextInput:
+            hint_text: "Username"
+            multiline: False
+            pos_hint: {"center_x": 0.5, "center_y": 0.35}
+            size_hint: (0.4, 0.05)
+
+        TextInput:
+            hint_text: "Password"
+            multiline: False
+            pos_hint: {"center_x": 0.5, "center_y": 0.28}
+            size_hint: (0.4, 0.05)
+        
+        Button:
+            text: "Login"
+            size_hint: (0.4, 0.08)
+            pos_hint: {"center_x": 0.5,"center_y": 0.1}
+            on_press: root.manager.current = "ChatPage"
+
+<ChatPage>:
+    BoxLayout:
+        orientation: "horizontal"
+
+        Button:
+            text: "Chat List goes here"
+            size_hint: (0.4, 1)
+        BoxLayout:
+            orientation: "vertical"
+
+            Button:
+                text: "Chat Screen goes here"
+                size_hint: (1, 0.9)
+            Button:
+                text: "Chat Input goes here"
+                size_hint: (1, 0.1)
+
+
+
+
+
+
