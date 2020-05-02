@@ -8,36 +8,19 @@ from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 from encryption import *
 from contactbase import *
+from database import *
 from tui import *
 
 def receive():
+    text_read = open('temp', 'w')
     while True:
             msg = client_socket.recv(BUFSIZ)
             if not msg:
                 break
-            readable = msg.decode("utf8")
-            RecordListDisplay.update_message_list(readable)
-
-class InputBox(npyscreen.MultiLineEdit):
-    def __init__(self, *args, **keywords):
-        super(InputBox, self).__init__(*args, **keywords)
-        self.add_handlers({
-            curses.ascii.NL: self.when_add_Message,
-        })
-    def when_add_Message(self, *args, **keywords):
-        #try:
-        if(self.value!=""):
-            wgsender = settings.user
-            wgreceiver = settings.message_receiver
-            self.wgcontents  = self.value
-            msg=bytes(wgsender+":"+wgreceiver+":"+self.wgcontents,"utf8")
-            client_socket.send(msg)
-            self.value=""
-    #    except:
-    #        self.value = ""
-
-class BoxTitle(npyscreen.BoxTitle):
-     _contained_widget = InputBox
+            dec = msg.decode("utf-8")
+            for item in dec:
+                item.split(',')
+            text_read.write(str(dec))
 
 class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
@@ -72,16 +55,19 @@ class RecordListDisplay(npyscreen.FormBaseNew):
         self.MessageBox.values = messagelist
         self.MessageBox.display()
 
+    def sendmsg(self, contents):
+        client_socket.send(contents)
+
 class gui(npyscreen.NPSAppManaged):
     def onStart(self):
+        self.myDatabase = MessageDatabase()
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)
 
-def display():
+if __name__ == '__main__':
     HOST = '127.0.0.1'
     PORT = 6901
-
     BUFSIZ = 1024
     ADDR = (HOST, PORT)
     global client_socket
@@ -92,9 +78,3 @@ def display():
     receive_thread.start()
     myApp = gui()
     myApp.run()
-
-b = Thread(name='background1', target=receive)
-f = Thread(name='foreground', target=display)
-
-b.start()
-f.start()

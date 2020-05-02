@@ -2,6 +2,27 @@ import npyscreen
 import settings
 import curses
 
+class InputBox(npyscreen.MultiLineEdit):
+    def __init__(self, *args, **keywords):
+        super(InputBox, self).__init__(*args, **keywords)
+        self.add_handlers({
+            curses.ascii.NL: self.when_add_Message,
+        })
+    def when_add_Message(self, *args, **keywords):
+        #try:
+        if(self.value!=""):
+            wgsender = settings.user
+            wgreceiver = settings.message_receiver
+            self.wgcontents  = self.value
+            msg=bytes(wgsender+":"+wgreceiver+":"+self.wgcontents,"utf8")
+            self.parent.sendmsg(msg)
+            self.value=""
+    #    except:
+    #        self.value = ""
+
+class BoxTitle(npyscreen.BoxTitle):
+     _contained_widget = InputBox
+
 
 class RecordList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
@@ -13,8 +34,8 @@ class RecordList(npyscreen.MultiLineAction):
         return "%s" % (vl[1])
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
         settings.message_receiver = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
-        #messages = self.parent.parentApp.myDatabase.get_record(settings.message_receiver)
-        self.parent.update_message_list("")
+        messages = self.parent.parentApp.myDatabase.get_record(settings.message_receiver)
+        self.parent.update_message_list(messages)
 
     def when_add_record(self, *args, **keywords):
         self.parent.parentApp.getForm('EDITRECORDFM').value = None

@@ -29,7 +29,7 @@ class MessageDatabase(object):
     def output_messages(user1,user2):
         db = sqlite3.connect(configure.dbfilename)
         c = db.cursor()
-        c.execute('SELECT * from records WHERE sender=? AND receiver=?', (user1,user2))
+        c.execute('SELECT timestamp,sender,contents from records WHERE sender=? AND receiver=?', (user1,user2))
         records = c.fetchall()
         c.execute('SELECT * from records WHERE sender=? AND receiver=?', (user2,user1))
         records2 = c.fetchall()

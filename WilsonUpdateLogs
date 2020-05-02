@@ -1,4 +1,4 @@
-[Pre Sun Apr 26]
+[Pre Apr 26, --:--]
  - Npyscreen main page - Contact list, Message output and Message input.
  - Contacts database system (sqlite3)
  - Simple local socket server (to be hosted on domain later)
@@ -17,6 +17,11 @@
  - Database improvements - uses sender and reciever data to select specific database records to return.
 
 [Wed Apr 29, 23:01]
- - Finally created server side message output, using str() and some luck.
+ - Finally created server side message output, using str() and lots of luck.
  - Begun client side message output though it may need speed improvements eventually.
- - Cleanup and bugfixes
+ - 'Cleanup' and 'bugfixes'
+
+[Sat May 02, 22:55]
+ - (Limited) client/server interfacing improvements - currently saves messages to text file but changing to db.
+ - First message where it was sent from npyscreen client, recieived by server and echoed back to the client.
+ - Local message storage with YET ANOTHER sqlite database (I am now officially addicted to them).

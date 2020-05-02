@@ -1,7 +1,7 @@
 import settings
-def authenticate(client_socket):
+def authenticate(socket):
     wgsender = settings.user
     wgpass = settings.passw
 
     msg=bytes(wgsender+":"+wgpass,"utf8")
-    client_socket.send(msg)
+    socket.send(msg)

@@ -13,7 +13,6 @@ def accept_incoming_connections():
 
 def handle_client(client):
     try:
-
         authmsg = client.recv(BUFSIZ)
         dec = authmsg.decode("utf-8")
         if(dec!=""):
