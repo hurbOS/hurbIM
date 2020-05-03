@@ -25,3 +25,8 @@
  - (Limited) client/server interfacing improvements - currently saves messages to text file but changing to db.
  - First message where it was sent from npyscreen client, recieived by server and echoed back to the client.
  - Local message storage with YET ANOTHER sqlite database (I am now officially addicted to them).
+
+[Sun May 04, 16:38]
+ - (Very janky) but now messages are all stored in a db including ones sent by server.
+ - It IS possible to communicate between two clients now but so much work on accounts needs to be done (also domain)
+ - Minorly improved some code, made other bits shocking.

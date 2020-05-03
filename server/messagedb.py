@@ -29,17 +29,11 @@ class MessageDatabase(object):
     def output_messages(user1,user2):
         db = sqlite3.connect(configure.dbfilename)
         c = db.cursor()
-        c.execute('SELECT timestamp,sender,contents from records WHERE sender=? AND receiver=?', (user1,user2))
+        c.execute('SELECT sender,receiver,contents from records WHERE sender=? AND receiver=?', (user2,user1))
         records = c.fetchall()
-        c.execute('SELECT * from records WHERE sender=? AND receiver=?', (user2,user1))
-        records2 = c.fetchall()
         c.close()
         merged=[]
         for item in records:
             stringy = str(item)
             merged.append(bytes(stringy, "utf8"))
-        for item in records2:
-            stringy2 = str(item)
-            merged.append(bytes(stringy2, "utf8"))
-        merged.sort(key=itemgetter(0))
         return merged

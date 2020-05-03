@@ -1,23 +1,15 @@
 # hurbIM
-Hurb's official Instant Messenger. Made with Pythona and developed by Wilson, Pyrrh0_ and Dreamsmasher.
+Hurb's official Instant Messenger. Made with Python and developed by Wilson, Pyrrh0_ and Dreamsmasher.
 
 <<<<<<< HEAD
 ## Overall Progress
-[Sun Apr 26, 11:51]
+ - Designed basic npyscreen and kivy UIs [Mostly Completed]
+ - Send and receieve messages from server [Mostly Completed]
+ - Account system [Not Started]
+ - Extra UI features [Not Started]
+ - General feature requests [Not Started]
 
-- Somwhat Completed:
-    - Npyscreen (Linux) and Kivy (Windows + Linux) user interfaces
-    - Server sockets and sql handling
-    - "Push" data to server
-
-- TODO:
-    - "Pull" data from server
-    - User accounts (handled by website?)
-    - Security -  authentication and encryption
-    - Extra features from #hurbim-feature-requests
-
-## Wilson's Code [UPDATES](WilsonUpdateLogs)
-
-## Pyrrh0_'s Code [UPDATES](Pyrrh0_UpdateLogs)
+=======
+[wilson's Update Logs](WilsonUpdateLogs)
 =======
 [pyrrh0's Update Logs](https://github.com/notPyrrh0/hurbIM/blob/master/gui/UpdateLogs)

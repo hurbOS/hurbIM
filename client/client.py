@@ -3,12 +3,12 @@ import npyscreen
 import time
 import settings
 import auth
+import re
+import database
 
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
-from encryption import *
 from contactbase import *
-from database import *
 from tui import *
 
 def receive():
@@ -18,9 +18,13 @@ def receive():
             if not msg:
                 break
             dec = msg.decode("utf-8")
-            for item in dec:
-                item.split(',')
-            text_read.write(str(dec))
+            l = dec.replace('(', '')
+            p = l.replace(')', '')
+            k = p.replace(',', '')
+            q = k.split("'")
+            for i in range(3):
+                q.pop(i)
+            database.MessageDatabase.add_record(sender=q[0],receiver=q[1],contents=q[2],timestamp=time.ctime())
 
 class RecordListDisplay(npyscreen.FormBaseNew):
     def create(self):
@@ -60,7 +64,7 @@ class RecordListDisplay(npyscreen.FormBaseNew):
 
 class gui(npyscreen.NPSAppManaged):
     def onStart(self):
-        self.myDatabase = MessageDatabase()
+        self.myDatabase = database.MessageDatabase()
         self.myDatabase2 = AddressDatabase()
         self.addForm("MAIN", RecordListDisplay)
         self.addForm("EDITRECORDFM", EditContact)

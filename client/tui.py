@@ -1,6 +1,8 @@
 import npyscreen
 import settings
 import curses
+import time
+import database
 
 class InputBox(npyscreen.MultiLineEdit):
     def __init__(self, *args, **keywords):
@@ -10,15 +12,18 @@ class InputBox(npyscreen.MultiLineEdit):
         })
     def when_add_Message(self, *args, **keywords):
         #try:
-        if(self.value!=""):
-            wgsender = settings.user
-            wgreceiver = settings.message_receiver
-            self.wgcontents  = self.value
-            msg=bytes(wgsender+":"+wgreceiver+":"+self.wgcontents,"utf8")
-            self.parent.sendmsg(msg)
-            self.value=""
-    #    except:
-    #        self.value = ""
+            if(self.value!=""):
+                wgsender = settings.user
+                wgreceiver = settings.message_receiver
+                self.wgcontents  = self.value
+                msg=bytes(wgsender+":"+wgreceiver+":"+self.wgcontents,"utf8")
+                self.parent.sendmsg(msg)
+                database.MessageDatabase.add_record(sender=wgsender,receiver=wgreceiver,contents=self.wgcontents,timestamp=time.ctime())
+                self.value=""
+                messages = database.MessageDatabase.get_record(settings.message_receiver)
+                self.parent.update_message_list(messages)
+        #except:
+        #    self.value = ""
 
 class BoxTitle(npyscreen.BoxTitle):
      _contained_widget = InputBox
@@ -34,7 +39,7 @@ class RecordList(npyscreen.MultiLineAction):
         return "%s" % (vl[1])
     def actionHighlighted(self, act_on_this, keypress, *args, **keywords):
         settings.message_receiver = self.parent.parentApp.myDatabase2.user_get_record(self.values[self.cursor_line][0])[0]
-        messages = self.parent.parentApp.myDatabase.get_record(settings.message_receiver)
+        messages = database.MessageDatabase.get_record(settings.message_receiver)
         self.parent.update_message_list(messages)
 
     def when_add_record(self, *args, **keywords):
@@ -47,8 +52,7 @@ class BoxTitle2(npyscreen.BoxTitle):
 class MessageList(npyscreen.MultiLineAction):
     def __init__(self, *args, **keywords):
         super(MessageList, self).__init__(*args, **keywords)
-    #def display_value(self, vl):
-    #    return "%s %s %s" % (vl[1],vl[])
+
 class BoxTitle3(npyscreen.BoxTitle):
      _contained_widget = MessageList
 

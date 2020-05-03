@@ -29,15 +29,9 @@ def handle_client(client):
                             if not msg:
                                 break
                             msgsplitter=msg.decode("utf-8").split(':')
-                            print("received")
-                            wgsender=msgsplitter[0]
-                            wgreceiver=msgsplitter[1]
-                            wgcontents=msgsplitter[2]
-                            wgtimestamp=str(time.ctime())
-                            messagedb.MessageDatabase.add_record(sender=wgsender,receiver=wgreceiver,contents=wgcontents,timestamp=wgtimestamp)
-                            sendable = messagedb.MessageDatabase.output_messages(wgsender,wgreceiver)
+                            messagedb.MessageDatabase.add_record(sender=msgsplitter[0],receiver=msgsplitter[1],contents=msgsplitter[2],timestamp=time.ctime())
+                            sendable = messagedb.MessageDatabase.output_messages(msgsplitter[0],msgsplitter[1])
                             for item in sendable:
-                                print(item)
                                 client.send(item)
     except:
         print("client side error")
