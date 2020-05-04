@@ -1,9 +1,7 @@
-import curses
 import npyscreen
 import time
 import settings
 import auth
-import re
 import database
 
 from socket import AF_INET, socket, SOCK_STREAM
@@ -34,16 +32,11 @@ class RecordListDisplay(npyscreen.FormBaseNew):
                                    max_height=0,values=[])
         self.MessageBox = self.add(BoxTitle3,name="Messages", rely=1, relx=(x // 5) + 1, max_height=-3,
                                       custom_highlighting=True, highlighting_arr_color_data=[0],values=[
-                                      "██╗  ██╗██╗   ██╗██████╗ ██████╗     ██╗███╗   ███╗",\
-                                      "██║  ██║██║   ██║██╔══██╗██╔══██╗    ██║████╗ ████║",\
-                                      "███████║██║   ██║██████╔╝██████╔╝    ██║██╔████╔██║",\
-                                      "██╔══██║██║   ██║██╔══██╗██╔══██╗    ██║██║╚██╔╝██║",\
-                                      "██║  ██║╚██████╔╝██║  ██║██████╔╝    ██║██║ ╚═╝ ██║",\
-                                      "╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝     ╚═╝╚═╝     ╚═╝",\
-                                      "- Welcome to hurbIM, a free, open source messenger alternative.",\
-                                      "- To add a contact, type 'ctrl + a' while selecting the right hand bar", \
-                                      "- To select a contact, select it with enter from the right menu", \
-                                      "- For further help hit '?' to see a list of commands"\
+                                       " _   _ _   _ ____  ____    ___ __  __",\
+                                       "| | | | | | |  _ \| __ )  |_ _|  \/  |",\
+                                       "| |_| | | | | |_) |  _ \   | || |\/| |",\
+                                       "|  _  | |_| |  _ <| |_) |  | || |  | |",\
+                                       "|_| |_|\___/|_| \_\____/  |___|_|  |_|",\
                                       ]
 )
         self.InputBox = self.add(BoxTitle, name="Input", relx=(x // 5) + 1, rely=-5,max_height=-3)
