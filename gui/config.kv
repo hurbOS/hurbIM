@@ -26,13 +26,14 @@
 <ChatPage>:
     BoxLayout:
         orientation: "horizontal"
-
         Button:
             text: "Chat List goes here"
-            size_hint: (0.4, 1)
+            size_hint: (0.45, None)
+            height: 45
+            pos_hint: {"center_x": 0.5, "center_y": 0.5, "top": 0.8}
         BoxLayout:
             orientation: "vertical"
-
+            spacing: 10
             Button:
                 text: "Chat Screen goes here"
                 size_hint: (1, 0.9)
