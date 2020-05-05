@@ -1,3 +1,22 @@
++ TO-DO:
+    + [ ] Complete Login Screen
+    + [ ] Incorporate OOP
+    + [ ] Complete Kivy Application
+    + [ ] Start working on backend 
+
+[Tue May 5, 17:43]
+- Minimal (TUI)
+    - Working on login screen
+    - Minor changes to client
+
+**Note to fellow contributers:** <br>
+        If you're seeing this, we need to consider using OOP for the minimal TUI. 
+        Each Screen needs it's own class so that we can just import when we need it.
+        Idk about you guys but labels are complete shit so if you need one, 
+        just use d.add(x, y, "whatever text") and it will convert automatically. For example:
+
+        d.add(mid_x-15, 12, "Username:")
+
 [Sat May 2, 00:24]
 - Kivy Application
     - Completed Login screen
