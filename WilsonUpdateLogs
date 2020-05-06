@@ -37,3 +37,9 @@
    - Less code, lighter code;
    - It will be more suckless code (minimalism, yay!).
  - Picotui will be styled as a mutt/ranger interface with vim bindings, for an EXTREME linux experience.
+
+[Wed May 06, 23:14]
+ - Picotui was also a bust, however pure curses in python rocks.
+ - Much easier, faster and more efficent code structure.
+ - Redesigning with terminal like structure rather than just input.
+ - Original npyscreen is obsolete now, so don't work on it but don't delete it yet either.

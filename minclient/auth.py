@@ -1,9 +1,9 @@
-import settings
+import config
 from cryptography.fernet import Fernet
 
 def authenticate(socket):
-    wgsender = settings.user
-    wgpass = settings.passw
+    wgsender = config.user
+    wgpass = config.passw
 
     msg=bytes(wgsender+":"+wgpass,"utf8")
     socket.send(msg)
