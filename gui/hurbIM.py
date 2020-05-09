@@ -2,14 +2,23 @@ import kivy
 from kivy.config import Config
 from kivy.app import App, Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.properties import ObjectProperty
 
 Config.set("input","mouse", "mouse, multitouch_on_demand")
 
 
-
 class LoginPage(Screen):
-    pass
+    user = ObjectProperty(None)
+    passw = ObjectProperty(None)
 
+    def createAcc(self):
+        sm.current = "CreateAccount"
+
+    def login(self):
+        if user.text == "admin" and pass.text == "admin":
+            sm.current = "ChatPage"
+        else: 
+            pass
 class CreateAccount(Screen):
     pass
 

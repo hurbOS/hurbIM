@@ -1,4 +1,7 @@
 <LoginPage>:
+    user: username
+    passw: password
+    
     FloatLayout:
         Image:
             source: "logo_white.png"
@@ -7,21 +10,31 @@
            
         TextInput:
             hint_text: "Username"
+            id: username
             multiline: False
             pos_hint: {"center_x": 0.5, "center_y": 0.35}
             size_hint: (0.4, 0.05)
 
         TextInput:
             hint_text: "Password"
+            id: password
             multiline: False
             pos_hint: {"center_x": 0.5, "center_y": 0.28}
             size_hint: (0.4, 0.05)
         
         Button:
+            text: "Create Account"
+            multiline: False
+            background_color: [0, 0, 0, 1]
+            pos_hint: {"center_x": 0.5, "center_y": 0.22}
+            size_hint: (0.15, 0.05)
+            on_press: root.createAcc()
+
+        Button:
             text: "Login"
             size_hint: (0.4, 0.08)
             pos_hint: {"center_x": 0.5,"center_y": 0.1}
-            on_press: root.manager.current = "ChatPage"
+            on_press: root.login()
 
 <ChatPage>:
     BoxLayout:

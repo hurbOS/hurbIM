@@ -1,9 +1,12 @@
 + TO-DO:
-    + [ ] Complete Login Screen
-    + [ ] Incorporate OOP
-    + [ ] Complete Kivy Application
-    + [ ] Start working on backend 
+    + GUI
+        + [X] Complete Login Screen
+        + [ ] Complete Chat Screen
+        + [ ] Complete Create Account
 
+    + Backend
+        + [ ] Understand wtf is going on
+        
 [Tue May 5, 17:43]
 - Minimal (TUI)
     - Working on login screen
