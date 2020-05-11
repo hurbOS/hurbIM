@@ -1,12 +1,27 @@
 + TO-DO:
     + GUI
         + [X] Complete Login Screen
+        + [X] Complete Create Account
         + [ ] Complete Chat Screen
-        + [ ] Complete Create Account
+        + [ ] Complete Settings Screen 
 
     + Backend
         + [ ] Understand wtf is going on
-        
+        + [ ] Start implementing mySQL on a new branch. SQLite3 seems less secure (not verified)
+        + [ ] Setup an account system in the database
+        + [ ] Setup authentication system of people's information, email perhaps?
+        + [ ] Research on chat app structures, how they work, how to implement them, etc.
+        + [ ] Research security risks off the app... SQL injection, Buffer Overflow, Web attacks etc.
+
+[Mon May 11, 17:46]
+
+Notes: Started working on the "Create Account" screen, a few touches and it should be done. However, my main concern is the app's ability to scale correctly when resized/maximized. I've been thinking of also implementing some sort of user customzation settings, perhaps custom wallpapers for the chat screen, layout and color cutomizations and light mode for the poggers. I also need to do some research about this but I'm struggling to find time (*sigh*school). Anyways all major changes are below.
+
+* Changes:
+    * Created sepearte folders for source files - "fonts" and "images"
+    * Added in new "Create Account" image and all Roboto fonts - do I need the lisence there?
+    * Completed "Create Account" screen
+
 [Tue May 5, 17:43]
 - Minimal (TUI)
     - Working on login screen

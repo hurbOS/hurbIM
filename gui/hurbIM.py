@@ -6,7 +6,6 @@ from kivy.properties import ObjectProperty
 
 Config.set("input","mouse", "mouse, multitouch_on_demand")
 
-
 class LoginPage(Screen):
     user = ObjectProperty(None)
     passw = ObjectProperty(None)
@@ -15,12 +14,20 @@ class LoginPage(Screen):
         sm.current = "CreateAccount"
 
     def login(self):
-        if user.text == "admin" and pass.text == "admin":
-            sm.current = "ChatPage"
-        else: 
-            pass
+        sm.current = "ChatPage"
+
 class CreateAccount(Screen):
-    pass
+    # Username, Password and ConfirmPassword
+    u = ObjectProperty(None)
+    p = ObjectProperty(None)
+    cp = ObjectProperty(None)
+
+    def createAcc(self):
+        usernm = str(self.u.text).strip(" ")
+        passw = str(self.p.text).strip(" ") 
+        confPass = str(self.cp.text).strip(" ")
+
+        print(usernm, passw, confPass)      
 
 class ChatPage(Screen):
     pass 

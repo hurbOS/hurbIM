@@ -1,40 +1,44 @@
 <LoginPage>:
-    user: username
-    passw: password
+    user: user
+    passw: passw
     
     FloatLayout:
         Image:
-            source: "logo_white.png"
+            source: "images/logo_white.png"
             size_hint: (0.8, 0.4)
             pos_hint: {"center_x": 0.5, "center_y": 0.7}
            
         TextInput:
             hint_text: "Username"
-            id: username
+            id: user
             multiline: False
             pos_hint: {"center_x": 0.5, "center_y": 0.35}
-            size_hint: (0.4, 0.05)
+            size_hint: (0.4, 0.06)
+            font_size: 18
 
         TextInput:
             hint_text: "Password"
-            id: password
+            id: passw
             multiline: False
             pos_hint: {"center_x": 0.5, "center_y": 0.28}
-            size_hint: (0.4, 0.05)
-        
+            size_hint: (0.4, 0.06)
+            font_size: 18
+
         Button:
             text: "Create Account"
             multiline: False
             background_color: [0, 0, 0, 1]
-            pos_hint: {"center_x": 0.5, "center_y": 0.22}
+            pos_hint: {"center_x": 0.5, "center_y": 0.20}
             size_hint: (0.15, 0.05)
             on_press: root.createAcc()
+            font_size: 18
 
         Button:
             text: "Login"
             size_hint: (0.4, 0.08)
             pos_hint: {"center_x": 0.5,"center_y": 0.1}
             on_press: root.login()
+            font_size: 18
 
 <ChatPage>:
     BoxLayout:
@@ -50,10 +54,76 @@
             Button:
                 text: "Chat Screen goes here"
                 size_hint: (1, 0.9)
+                font_size: 18
             Button:
                 text: "Chat Input goes here"
                 size_hint: (1, 0.1)
+                font_Size: 18
 
+<CreateAccount>:
+    u: u
+    p: p 
+    cp: cp
+
+    FloatLayout:
+        Image:
+            source: "images/Create_Account.png"
+            size_hint: (0.75, 0.5)
+            pos_hint: {"center_x": 0.5, "center_y": 0.7}
+            
+        TextInput:
+            id: u
+            hint_text: "Username"
+            multiline: False
+            size_hint: (0.38, None)
+            height: 35
+            pos_hint: {"center_x": 0.5, "center_y": 0.36}
+            spacing: 2
+            font_size: 18
+            keyboard_suggestions: False
+        
+        TextInput:
+            id: p
+            hint_text: "Password"
+            multiline: False
+            size_hint: (0.38, None)
+            height: 35
+            pos_hint: {"center_x": 0.5, "center_y": 0.29}
+            spacing: 2
+            font_size: 18
+            password: True
+            allow_copy: False
+            keyboard_suggestions: False
+            
+        TextInput:
+            id: cp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+            hint_text: "Confirm Password"
+            multiline: False
+            size_hint: (0.38, None)
+            height: 35
+            pos_hint: {"center_x": 0.5, "center_y": 0.22}
+            spacing: 2
+            font_size: 18
+            password: True
+            allow_copy: False
+            keyboard_suggestions: False
+        
+        Button:
+            text: "Create Account"
+            size_hint: (0.45, None)
+            height: 45
+            pos_hint: {"center_x": 0.5, "center_y": 0.13}
+            spacing: 2
+            on_press: root.createAcc()
+            font_size: 18
+
+        Button:
+            text: "Cancel"
+            
+        
+
+        
+            
 
 
 
