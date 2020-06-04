@@ -43,3 +43,10 @@
  - Much easier, faster and more efficent code structure.
  - Redesigning with terminal like structure rather than just input.
  - Original npyscreen is obsolete now, so don't work on it but don't delete it yet either.
+
+[Thu Jun 04, 18:35]
+ - Finished off some tuff in the python client.
+ - Another redesign: changing language to rust (for the moment).
+ - Two new application modes: GUI and TUI.
+ - New backend: modified discord with modifications, no electron for a lighweight program.
+ - We welcome Fark to the team!
